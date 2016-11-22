@@ -5,36 +5,40 @@
 
 'use strict';
 
-
-$(document).ready(function () {
-	console.log( 'loaded' );
-});
-
 $(document).ready(function () {
 	$( '#resume_attachment' ).each( function(){
 		var input	 = $(this);
 		var label	 = input.next( 'label' );
-		var	labelVal = label.html();
+		var	initLabelVal = label.text();
+		var fileInputName = $('#resume_name');
 
-		input.on( 'click', function( e )
-		{			
-			console.log( 'input clicked' );	
-		});
 
 		input.on( 'change', function( e )
 		{
-			console.log('Changed');
 			var fileName = '';
+			var	inputVal = fileInputName.val();
+			var currLabelVal = label.text();
 
+			// Set file name var
 			if( this.files && this.files.length > 1 )
 				fileName = ( this.getAttribute( 'data-multiple-caption' ) || '' ).replace( '{count}', this.files.length );
 			else if( e.target.value )
 				fileName = e.target.value.split( '\\' ).pop();
 
+			// Change button text			
 			if( fileName )
-				label.find( 'span' ).html( fileName );
+				label.text( fileName );
 			else
-				label.html( labelVal );
+				label.text( initLabelVal );
+
+			// Change input text
+			if( !inputVal ||  ( inputVal.toString() == currLabelVal.toString() ))
+				fileInputName.val( fileName );
+			else
+				fileInputName.val( inputVal );
+
+			console.log(inputVal);
+			console.log(currLabelVal);
 		});
 
 		// Firefox bug fix
